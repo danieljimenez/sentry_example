@@ -1,0 +1,28 @@
+#<% require 'kitchen-sync' %>
+---
+provisioner:
+  name: chef_solo
+  attributes:
+    data_bags_path: test/integration/data_bags
+
+platforms:
+  - name: amazon
+    transport:
+      name: sftp
+      username: ec2-user
+    driver:
+      name: ec2
+      provider: ec2
+      image_id: ami-1ecae776
+      instance_type: m3.medium
+      # security_group_ids: ['sg-7461ae1b']
+      aws_ssh_key_id: DevOps
+
+suites:
+  - name: default
+    run_list:
+      - recipe[sentry_example]
+    attributes:
+      postgresql:
+        password:
+          postgres: example
